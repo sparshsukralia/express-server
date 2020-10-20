@@ -11,6 +11,13 @@ const app = express();
 //   res.sendFile(path.join(__dirname, "public", "index.html"));
 // });
 
+const logger = (req, res, next) => {
+  console.log(`${req.protocol}://${req.get("host")}${req.originalUrl}`);
+  next();
+};
+
+app.use(logger);
+
 app.get("/api/members", (req, res) => res.json(members));
 
 // setting a static folder
