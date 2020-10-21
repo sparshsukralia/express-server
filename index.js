@@ -2,6 +2,7 @@
 const express = require("express");
 const path = require("path");
 const members = require("./Members");
+const logger = require("./middleware/logger");
 
 // initializing express app
 const app = express();
@@ -11,14 +12,16 @@ const app = express();
 //   res.sendFile(path.join(__dirname, "public", "index.html"));
 // });
 
-const logger = (req, res, next) => {
-  console.log(`${req.protocol}://${req.get("host")}${req.originalUrl}`);
-  next();
-};
+// Init middleware
+// app.use(logger);
 
-app.use(logger);
-
+// get all members
 app.get("/api/members", (req, res) => res.json(members));
+
+// get single member
+app.get("/api/members/:id", (req, res) => {
+  res.json(members.filter((member) => member.id === parseInt(req.params.id)));
+});
 
 // setting a static folder
 app.use(express.static(path.join(__dirname, "public")));
