@@ -1,7 +1,7 @@
 // importing express from the modules
 const express = require("express");
 const path = require("path");
-const members = require("./Members");
+
 const logger = require("./middleware/logger");
 
 // initializing express app
@@ -15,16 +15,15 @@ const app = express();
 // Init middleware
 // app.use(logger);
 
-// get all members
-app.get("/api/members", (req, res) => res.json(members));
-
-// get single member
-app.get("/api/members/:id", (req, res) => {
-  res.json(members.filter((member) => member.id === parseInt(req.params.id)));
-});
+// Body Parser Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 // setting a static folder
 app.use(express.static(path.join(__dirname, "public")));
+
+// Members API Routes
+app.use("/api/members", require("./routes/api/members"));
 
 const PORT = process.env.PORT || 5000;
 
