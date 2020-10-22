@@ -17,6 +17,25 @@ router.get("/:id", (req, res) => {
   }
 });
 
+// Update Member
+router.put("/:id", (req, res) => {
+  const found = members.some((member) => member.id === parseInt(req.params.id));
+
+  if (found) {
+    const updatedMember = req.body;
+    members.forEach((member) => {
+      if (member.id === parseInt(req.params.id)) {
+        member.name = updatedMember.name ? updatedMember.name : member.name;
+        member.email = updatedMember.email ? updatedMember.email : member.email;
+
+        res.json({ msg: "Member Updated", member });
+      }
+    });
+  } else {
+    res.status(400).json({ msg: `No member found of id ${req.params.id}` });
+  }
+});
+
 // Create Member
 router.post("/", (req, res) => {
   const newMember = {
